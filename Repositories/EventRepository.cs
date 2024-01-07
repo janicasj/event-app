@@ -70,6 +70,14 @@ namespace EventApp.Services
         public List<Event> GetEvents(string? type = null, DateTime? time = null)
         {
             var query = _dbContext.Events.AsQueryable();
+            if (!string.IsNullOrWhiteSpace(type))
+            {
+                query = query.Where(t => t.Type == type);
+            }
+            if (time.HasValue)
+            {
+                query = query.Where(t => t.Time == time);
+            }
             var events = query.Include(e => e.Persons).ToList();
             return events;
         }
